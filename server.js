@@ -1,11 +1,9 @@
-
+require('dotenv').config();
 const express = require('express');
 const connectdb=require('./db.js')
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const cookieParser = require('cookie-parser');
-
-
 
 const app = express();
 app.use(express.json());

@@ -31,24 +31,24 @@ router.post('/signup', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   let { username, password } = req.body;
-  username=username.trim();
-  username=username.charAt(0).toUpperCase() + username.slice(1);
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required.' });
   }
+  username=username.trim();
+  username=username.charAt(0).toUpperCase() + username.slice(1);
   const user = await User.findOne({ username });
   if (!user) return res.status(400).json({ error: 'Invalid credentials.' });
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ error: 'Invalid credentials.' });
 
-  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET);
 
   res.cookie('token', token, {
     httpOnly: true,       // Prevent JavaScript access to the cookie
     secure: process.env.NODE_ENV === 'production',        
     sameSite: 'None',   // Allowing for cross-origin cookie transfer
-    maxAge: 7200000       // 2 hour expiration
+    maxAge: 86400000       //  1 day expiration
   });
   res.status(201).json({ message: 'Login successful' });
 });

@@ -3,5 +3,4 @@ node_modules/
 
 # Environment variables
 .env
-extra.txt
 
